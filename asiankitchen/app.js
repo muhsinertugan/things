@@ -86,6 +86,7 @@ function createMenu() {
 	let sortedMenuItems = [];
 
 	const btnContainer = document.querySelector(".btn-container");
+	const menuContainer = document.querySelector(".section-center");
 
 	function menuItemSort(array, valueOf) {
 		for (let i = 0; i < menu.length; i++) {
@@ -104,7 +105,6 @@ function createMenu() {
 	}
 
 	function createMenuItems(srcInfo, altInfo, titleInfo, priceInfo, descInfo) {
-		const menuContainer = document.querySelector(".section-center");
 		const menuInfo = document.createElement("div");
 		const menuItems = document.createElement("div");
 		const menuImg = document.createElement("img");
@@ -137,16 +137,40 @@ function createMenu() {
 
 	// create buttons
 	menuItemSort(sortedMenuItems, "category");
-	itemCategories = [...new Set(sortedMenuItems)];
-	catBtnCreate("All");
+	itemCategories = ["All", ...new Set(sortedMenuItems)];
 	itemCategories.map(catBtnCreate);
 
 	itemCategories.forEach((element) =>
 		document
 			.getElementById(element)
-			.addEventListener("click", console.log("hello"))
+			.addEventListener("click", () => catChange(element))
 	);
 
+	function catChange(catName) {
+		if (catName == "All") {
+			for (let i = 0; i < menu.length; i++) {
+				createMenuItems(
+					menu[i].img,
+					menu[i].title,
+					menu[i].title,
+					menu[i].price,
+					menu[i].desc
+				);
+			}
+		} else {
+			menuContainer.innerHTML = "";
+			menu.filter((element) => element.category == catName).forEach(
+				(item) =>
+					createMenuItems(
+						item.img,
+						item.title,
+						item.title,
+						item.price,
+						item.desc
+					)
+			);
+		}
+	}
 	for (let i = 0; i < menu.length; i++) {
 		createMenuItems(
 			menu[i].img,
